@@ -6,7 +6,6 @@ export class RequestValidationError extends CustomError {
 
   constructor(public errors: ValidationError[]) {
     super("Invalid request");
-    Object.setPrototypeOf(this, RequestValidationError.prototype);
   }
 
   serializeErrors() {
