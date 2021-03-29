@@ -8,7 +8,7 @@ export interface Request {
   onSuccess(data?: any): void;
 }
 
-const useRequest = ({ url, method, body, onSuccess }: Request) => {
+const useSignRequest = ({ url, method, body, onSuccess }: Request) => {
   const [errors, setErrors] = useState(null);
 
   const doRequest = async () => {
@@ -19,7 +19,7 @@ const useRequest = ({ url, method, body, onSuccess }: Request) => {
       setErrors(
         <div className="my-3 bg-red-400">
           <ul className="p-3">
-            {e.response.data.errors.map((e) => (
+            {e?.response?.data?.errors?.map((e) => (
               <li key={e.message} className="text-red-100 my-2">
                 {e.message}
               </li>
@@ -33,4 +33,4 @@ const useRequest = ({ url, method, body, onSuccess }: Request) => {
   return { doRequest, errors };
 };
 
-export default useRequest;
+export default useSignRequest;

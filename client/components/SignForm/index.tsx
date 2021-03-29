@@ -1,9 +1,10 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import Router from "next/router";
-import useRequest from "../../hooks/use-request";
+import useRequest from "../../hooks/use-sign-request";
 import Text from "../../components/Text";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
+import { mutate } from "swr";
 
 interface SignProps {
   type: "signin" | "signup";
@@ -13,6 +14,7 @@ interface SignProps {
 export default function SignForm({ type, title }: SignProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { doRequest, errors } = useRequest({
     url: `/api/users/${type}`,
     method: "post",
@@ -23,10 +25,21 @@ export default function SignForm({ type, title }: SignProps) {
     onSuccess: () => Router.push("/"),
   });
 
-  const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  useEffect(() => {
+    setLoading(false);
+  }, [errors]);
 
-    await doRequest();
+  const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
+    if (!loading) {
+      setLoading(true);
+
+      e.preventDefault();
+
+      await doRequest();
+
+      mutate("api/users/currentuser");
+    }
+    setLoading(false);
   };
 
   return (
@@ -50,7 +63,12 @@ export default function SignForm({ type, title }: SignProps) {
           />
         </div>
         {errors}
-        <Button text={title} />
+        <Button
+          text={title}
+          loading={loading}
+          disabled={loading}
+          className="mt-4"
+        />
       </form>
     </div>
   );

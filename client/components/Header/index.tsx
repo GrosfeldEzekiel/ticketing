@@ -1,16 +1,23 @@
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { mutate } from "swr";
+import useSignRequest from "../../hooks/use-sign-request";
 import useUser from "../../hooks/use-user";
 import Link from "../Link";
 
 export default function Header(props) {
-  /* const { data, isLoading, isError } = useUser();
+  const { data } = useUser();
+  const router = useRouter();
+  const { doRequest } = useSignRequest({
+    url: "api/users/signout",
+    method: "post",
+    body: {},
+    onSuccess: async () => {
+      router.push("/");
+    },
+  });
 
-  if (data) {
-    return <h1>Logeado</h1>;
-  }
-  return <h1>Deslogeado</h1>; */
   return (
-    <div className="bg-purple-600 max-h-32 py-5 sm:py-9 px-6 w-full items-center flex-col flex sm:flex-row">
+    <div className="bg-purple-600 max-h-32 py-5 sm:py-9 px-6 w-full text-center items-center flex-col flex sm:flex-row">
       <div className="">
         <Link
           href="/"
@@ -20,8 +27,21 @@ export default function Header(props) {
         />
       </div>
       <div className="sm:right-6 sm:float-right sm:absolute sm:mt-0 mt-6 block space-x-8">
-        <Link href="/signin" text="Iniciar Sesión" color="white" />
-        <Link href="/signup" text="Registrarse" color="white" />
+        {data ? (
+          <Link
+            onClick={async () => {
+              await doRequest();
+              mutate("api/users/currentuser", null);
+            }}
+            text="Salir"
+            color="white"
+          />
+        ) : (
+          <>
+            <Link href="/signin" text="Iniciar Sesión" color="white" />
+            <Link href="/signup" text="Registrarse" color="white" />
+          </>
+        )}
       </div>
     </div>
   );
