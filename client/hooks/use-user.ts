@@ -1,19 +1,13 @@
 import useSWR from "swr";
-import axios from "axios";
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const useUser = () => {
-  const { data, error } = useSWR("api/users/currentuser", fetcher, {
+  const { data } = useSWR("api/users/currentuser", {
     shouldRetryOnError: false,
-    revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
 
   return {
     data: data,
-    isLoading: !error && !data,
-    isError: error,
   };
 };
 

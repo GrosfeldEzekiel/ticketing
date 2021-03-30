@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import Router from "next/router";
-import useRequest from "../../hooks/use-sign-request";
+import useRequest from "../../hooks/use-request";
 import Text from "../../components/Text";
 import Button from "../../components/Button";
 import Input from "../../components/Input";

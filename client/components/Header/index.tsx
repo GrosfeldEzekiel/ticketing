@@ -1,13 +1,13 @@
 import { useRouter } from "next/router";
 import { mutate } from "swr";
-import useSignRequest from "../../hooks/use-sign-request";
+import useRequest from "../../hooks/use-request";
 import useUser from "../../hooks/use-user";
 import Link from "../Link";
 
 export default function Header(props) {
   const { data } = useUser();
   const router = useRouter();
-  const { doRequest } = useSignRequest({
+  const { doRequest } = useRequest({
     url: "api/users/signout",
     method: "post",
     body: {},
