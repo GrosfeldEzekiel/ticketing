@@ -1,3 +1,4 @@
 node_modules
 secrets.sh
 .next
+.env.db

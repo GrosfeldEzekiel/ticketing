@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: auth-depl
+  name: tickets-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth
+      app: tickets
   template:
     metadata:
       labels:
-        app: auth
+        app: tickets
     spec:
       containers:
-          - name: auth
-            image: gcr.io/ticketing-307923/auth
+          - name: tickets
+            image: gcr.io/ticketing-307923/tickets
             env:
               - name: JWT_KEY
                 valueFrom:
@@ -25,18 +25,17 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: db-secrets
-                    key: AUTH_URI
-      dnsPolicy: Default
+                    key: TICKETS_URI
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-srv
+  name: tickets-srv
 spec:
   selector:
-    app: auth
+    app: tickets
   ports:
-    - name: auth
+    - name: tickets
       protocol: TCP
       port: 3000
       targetPort: 3000
