@@ -4,6 +4,10 @@ import { json } from "body-parser";
 import cookieSession from "cookie-session";
 
 import { errorHandler, NotFoundError } from "@eg-ticketing/common";
+import { createTicketRouter } from "./routes/new";
+import { showTicketRouter } from "./routes/show";
+import { indexTicketRouter } from "./routes";
+import { editTicketRouter } from "./routes/edit";
 
 const app = express();
 // TRUST NGINX
@@ -16,6 +20,11 @@ app.use(
     secure: process.env.NODE_ENV !== "test" ? true : false,
   })
 );
+
+app.use(createTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(editTicketRouter);
 
 app.all("*", () => {
   throw new NotFoundError();

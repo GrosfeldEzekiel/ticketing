@@ -26,6 +26,7 @@ spec:
                   secretKeyRef:
                     name: db-secrets
                     key: TICKETS_URI
+      dnsPolicy: Default
 ---
 apiVersion: v1
 kind: Service
