@@ -12,7 +12,7 @@ it("Excpect error 404 not found", async () => {
 
 it("Should return the ticket", async () => {
   const title = "My ticket";
-  const price = "20";
+  const price = 20;
   const response = await request(app)
     .post("/api/tickets")
     .set("Cookie", getCookie())

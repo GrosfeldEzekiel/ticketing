@@ -56,7 +56,7 @@ it("Should successfully create ticket", async () => {
   await request(app)
     .post("/api/tickets")
     .set("Cookie", getCookie())
-    .send({ title: "My ticket", price: "20" })
+    .send({ title: "My ticket", price: 20 })
     .expect(201);
 
   tickets = await Ticket.find({});

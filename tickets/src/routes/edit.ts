@@ -26,7 +26,7 @@ router.put(
 
     ticket.set({
       title,
-      price: +price,
+      price,
     });
 
     await ticket.save();

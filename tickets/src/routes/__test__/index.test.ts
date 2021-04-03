@@ -6,7 +6,7 @@ const createTicket = () => {
   return request(app)
     .post("/api/tickets")
     .set("Cookie", getCookie())
-    .send({ title: "Random", price: "20" })
+    .send({ title: "Random", price: 20 })
     .expect(201);
 };
 
