@@ -36,6 +36,7 @@ kind: Service
 metadata:
   name: nats-srv
 spec:
+  clusterIP: 10.112.0.149
   selector:
     app: nats
   ports:
