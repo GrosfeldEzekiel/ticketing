@@ -3,6 +3,8 @@ import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import { getCookie } from "../../test/setup";
 
+import { natsWrapper } from "../../nats-wrapper";
+
 it("Should have a router listening to api/tickets for post requests", async () => {
   const response = await request(app).post("/api/tickets").send({});
   expect(response.status).not.toEqual(404);
@@ -62,4 +64,14 @@ it("Should successfully create ticket", async () => {
   tickets = await Ticket.find({});
   expect(tickets.length).toEqual(1);
   expect(tickets[0].price).toEqual(20);
+});
+
+it("Should successfully publish a created event", async () => {
+  await request(app)
+    .post("/api/tickets")
+    .set("Cookie", getCookie())
+    .send({ title: "My ticket", price: 20 })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

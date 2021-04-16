@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import { app } from "../../app";
 import { getCookie } from "../../test/setup";
 
+import { natsWrapper } from "../../nats-wrapper";
+
 it("Expect error of ticket does not exists", async () => {
   await request(app)
     .put(`/api/tickets/${new mongoose.Types.ObjectId().toHexString()}`)
@@ -74,4 +76,23 @@ it("Should successfully update the ticket", async () => {
 
   expect(response.body.title).toEqual("New Title");
   expect(response.body.price).toEqual(30);
+});
+
+it("Should successfully publish an updated event", async () => {
+  const user = getCookie();
+  const initial = await request(app)
+    .post("/api/tickets")
+    .set("Cookie", user)
+    .send({ title: "My ticket", price: 20 })
+    .expect(201);
+
+  await request(app)
+    .put(`/api/tickets/${initial.body.id}`)
+    .set("Cookie", user)
+    .send({ title: "New Title", price: 30 })
+    .expect(200);
+
+  await request(app).get(`/api/tickets/${initial.body.id}`).send().expect(200);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });

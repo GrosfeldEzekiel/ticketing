@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 
 let mongo: any;
 
+jest.mock("../nats-wrapper");
+
 beforeAll(async () => {
   process.env.JWT_KEY = "random";
 
@@ -17,6 +19,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  jest.clearAllMocks();
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
@@ -34,7 +37,7 @@ export const getCookie = () => {
     jwt: jwt.sign(
       {
         id: new mongoose.Types.ObjectId().toHexString(),
-        email: "test@tes.com",
+        email: "test@test.com",
       },
       process.env.JWT_KEY!
     ),
