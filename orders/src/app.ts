@@ -6,7 +6,7 @@ import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError } from "@eg-ticketing/common";
 import { indexOrderRouter } from "./routes";
 import { showOrderRouter } from "./routes/show";
-import { deleteOrderRouter } from "./routes/delete";
+import { cancelOrderRouter } from "./routes/patch";
 import { newOrderRouter } from "./routes/new";
 
 const app = express();
@@ -24,7 +24,7 @@ app.use(
 app.use(indexOrderRouter);
 app.use(showOrderRouter);
 app.use(newOrderRouter);
-app.use(deleteOrderRouter);
+app.use(cancelOrderRouter);
 
 app.all("*", () => {
   throw new NotFoundError();
