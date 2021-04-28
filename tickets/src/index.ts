@@ -1,6 +1,6 @@
+import { natsWrapper } from "@eg-ticketing/common";
 import mongoose from "mongoose";
 import { app } from "./app";
-import { natsWrapper } from "./nats-wrapper";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -41,6 +41,7 @@ const start = async () => {
     console.log("Connected to Mongo DB");
   } catch (e) {
     console.error(e);
+    process.exit(1)
   }
 
   app.listen(3000, () => {

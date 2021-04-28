@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: gcr.io/ticketing-307923/client
+          image: ezegrosfeld/client
           env:
             - name: API_URL
               value: "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local"

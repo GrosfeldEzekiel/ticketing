@@ -2,8 +2,7 @@ import request from "supertest";
 import mongoose from "mongoose";
 import { app } from "../../app";
 import { getCookie } from "../../test/setup";
-
-import { natsWrapper } from "../../nats-wrapper";
+import { natsWrapper } from "@eg-ticketing/common";
 
 it("Expect error of ticket does not exists", async () => {
   await request(app)

@@ -297,9 +297,9 @@
     minimist "^1.2.0"
 
 "@eg-ticketing/common@^1.0.3":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@eg-ticketing/common/-/common-1.0.5.tgz#e8453e9b9489451e71d06ca3a40fc0f474da7afa"
-  integrity sha512-+a8U59FAoNTzhcezXtWK/n4AzM7IXkA6XgvjY7V2tHEKsA975bj7iNxzI2lirNv4acrGrcH5DcvtyFms+X62vw==
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@eg-ticketing/common/-/common-1.0.10.tgz#8e47a005156ec8d98977feed0e6a9495fbd599e2"
+  integrity sha512-wLuEdGRAnKlRsJ2Jq2CSC/rgQeLJu9sOzvYWj9laKkCqFMIjBR//moFlznWa3IF4AwgkyV9TFyircBaFmLwmCQ==
   dependencies:
     express "^4.17.1"
     express-validator "^6.10.0"

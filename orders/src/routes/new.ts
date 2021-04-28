@@ -1,5 +1,6 @@
 import {
   BadRequestError,
+  natsWrapper,
   NotFoundError,
   OrderStatus,
   requireAuth,
@@ -8,6 +9,7 @@ import {
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import mongoose from "mongoose";
+import { OrderCreatedPublisher } from "../events/publishers/order-created";
 import { Order } from "../models/order";
 import { Ticket } from "../models/ticket";
 
@@ -48,7 +50,16 @@ router.post(
 
     await order.save();
 
-    //Publish event
+    new OrderCreatedPublisher(natsWrapper.client).publish({
+      id: order.id,
+      status: order.status,
+      expiresAt: order.expiresAt.toISOString(),
+      userId: order.userId,
+      ticket: {
+        id: ticket.id,
+        price: ticket.price,
+      },
+    });
 
     res.status(201).send(order);
   }

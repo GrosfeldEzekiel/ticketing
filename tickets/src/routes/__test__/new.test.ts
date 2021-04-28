@@ -2,8 +2,8 @@ import request from "supertest";
 import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import { getCookie } from "../../test/setup";
+import { natsWrapper } from "@eg-ticketing/common";
 
-import { natsWrapper } from "../../nats-wrapper";
 
 it("Should have a router listening to api/tickets for post requests", async () => {
   const response = await request(app).post("/api/tickets").send({});

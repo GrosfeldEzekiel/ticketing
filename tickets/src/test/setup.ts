@@ -4,7 +4,25 @@ import jwt from "jsonwebtoken";
 
 let mongo: any;
 
-jest.mock("../nats-wrapper");
+jest.mock('@eg-ticketing/common', () => {
+  const original = jest.requireActual('@eg-ticketing/common');
+
+  return {
+    __esmodule: true,
+    ...original,
+    natsWrapper: {
+      client: {
+        publish: jest
+          .fn()
+          .mockImplementation(
+            (subject: string, data: string, callback: () => void) => {
+              callback();
+            }
+          ),
+      },
+    },
+  };
+});
 
 beforeAll(async () => {
   process.env.JWT_KEY = "random";

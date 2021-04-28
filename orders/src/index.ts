@@ -1,6 +1,8 @@
+import { natsWrapper } from "@eg-ticketing/common";
 import mongoose from "mongoose";
 import { app } from "./app";
-import { natsWrapper } from "./nats-wrapper";
+import { TicketCreatedListener } from "./events/listeneres/ticket-created";
+import { TicketUpdatedListener } from "./events/listeneres/ticket-updated";
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -33,6 +35,9 @@ const start = async () => {
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
+    new TicketCreatedListener(natsWrapper.client).listen()
+    new TicketUpdatedListener(natsWrapper.client).listen()
+
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -41,6 +46,7 @@ const start = async () => {
     console.log("Connected to Mongo DB");
   } catch (e) {
     console.error(e);
+    process.exit(1)
   }
 
   app.listen(3000, () => {

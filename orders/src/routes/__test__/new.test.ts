@@ -5,6 +5,7 @@ import { getCookie } from "../../test/setup";
 import { Ticket } from "../../models/ticket";
 import { Order } from "../../models/order";
 import { OrderStatus } from "@eg-ticketing/common";
+import { natsWrapper } from "@eg-ticketing/common";
 
 it("Expect bad ticket Id", async () => {
   await request(app)
@@ -62,4 +63,17 @@ it("Should successfully reserve a ticket", async () => {
   expect(orders.length).toEqual(1);
 });
 
-it.todo("Should successfully emit an event");
+it("Should successfully emit an event", async () => {
+  const ticket = Ticket.build({ title: "Concert", price: 20 });
+  await ticket.save();
+
+  await request(app)
+    .post("/api/orders")
+    .set("Cookie", getCookie())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});

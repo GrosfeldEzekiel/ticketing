@@ -1,9 +1,8 @@
-import { requireAuth, validateRequest } from "@eg-ticketing/common";
+import { natsWrapper, requireAuth, validateRequest } from "@eg-ticketing/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created";
 import { Ticket } from "../models/ticket";
-import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
