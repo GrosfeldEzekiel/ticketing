@@ -41,6 +41,7 @@ const ticketSchema = new mongoose.Schema(
       },
       versionKey: false,
     },
+    optimisticConcurrency: true
   }
 );
 

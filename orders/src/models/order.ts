@@ -39,6 +39,7 @@ const orderSchema = new mongoose.Schema(
         delete ret._id;
       },
     },
+    optimisticConcurrency: true
   }
 );
 

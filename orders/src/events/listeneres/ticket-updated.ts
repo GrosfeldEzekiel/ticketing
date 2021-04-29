@@ -12,10 +12,12 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
         const { title, price, id } = data
         const ticket = await Ticket.findById(id)
 
-        if (!ticket) throw new Error("Ticket not found")
+        if (!ticket) return
 
         ticket.set({ title, price })
 
         await ticket.save()
+
+        message.ack()
     }
 }
