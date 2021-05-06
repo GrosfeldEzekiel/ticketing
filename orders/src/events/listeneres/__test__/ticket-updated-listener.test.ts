@@ -16,6 +16,7 @@ const setup = async () => {
   await ticket.save();
 
   const data: TicketUpdatedEvent['data'] = {
+    version: 1,
     id: ticket.id,
     title: 'Awsome Title',
     price: 10,

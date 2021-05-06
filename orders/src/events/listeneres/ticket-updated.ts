@@ -9,10 +9,12 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     queueGroupName = QUEUE_GROUP_NAME
 
     async onMessage(data: TicketCreatedEvent["data"], message: Message) {
-        const { title, price, id } = data
+        const { title, price, id, version } = data
         const ticket = await Ticket.findById(id)
 
         if (!ticket) return
+
+        if (ticket.__v !== version - 1) return
 
         ticket.set({ title, price })
 
