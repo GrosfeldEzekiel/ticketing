@@ -26,7 +26,7 @@ it("Expect error if ticket does not exists", async () => {
 });
 
 it("Expect error if ticket is reserved", async () => {
-  const ticket = Ticket.build({ title: "Concert", price: 20 });
+  const ticket = Ticket.build({ id: mongoose.Types.ObjectId().toHexString(), title: "Concert", price: 20 });
   await ticket.save();
 
   const order = Order.build({
@@ -48,7 +48,7 @@ it("Expect error if ticket is reserved", async () => {
 });
 
 it("Should successfully reserve a ticket", async () => {
-  const ticket = Ticket.build({ title: "Concert", price: 20 });
+  const ticket = Ticket.build({ id: mongoose.Types.ObjectId().toHexString(), title: "Concert", price: 20 });
   await ticket.save();
 
   await request(app)
@@ -64,7 +64,7 @@ it("Should successfully reserve a ticket", async () => {
 });
 
 it("Should successfully emit an event", async () => {
-  const ticket = Ticket.build({ title: "Concert", price: 20 });
+  const ticket = Ticket.build({ id: mongoose.Types.ObjectId().toHexString(), title: "Concert", price: 20 });
   await ticket.save();
 
   await request(app)

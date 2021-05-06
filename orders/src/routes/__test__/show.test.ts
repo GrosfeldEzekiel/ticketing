@@ -6,6 +6,7 @@ import { getCookie } from "../../test/setup";
 
 const buildTicket = async () => {
   const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title: "Concert",
     price: 20,
   });

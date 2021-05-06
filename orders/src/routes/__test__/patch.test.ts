@@ -1,4 +1,5 @@
 import request from "supertest";
+import mongoose from "mongoose"
 import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 import { getCookie } from "../../test/setup";
@@ -7,7 +8,7 @@ import { Order } from "../../models/order";
 import { natsWrapper } from "@eg-ticketing/common";
 
 it("Successfully cancel an order", async () => {
-  const ticket = Ticket.build({ title: "Concert", price: 20 });
+  const ticket = Ticket.build({ title: "Concert", price: 20, id: mongoose.Types.ObjectId().toHexString() });
   await ticket.save();
 
   const user = getCookie();
@@ -33,7 +34,7 @@ it("Successfully cancel an order", async () => {
 });
 
 it("Should publish an order cancelled event", async () => {
-  const ticket = Ticket.build({ title: "Concert", price: 20 });
+  const ticket = Ticket.build({ id: mongoose.Types.ObjectId().toHexString(), title: "Concert", price: 20 });
   await ticket.save();
 
   const user = getCookie();
