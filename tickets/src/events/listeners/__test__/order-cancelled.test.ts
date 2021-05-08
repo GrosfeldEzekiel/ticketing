@@ -1,28 +1,20 @@
-import {
-	natsWrapper,
-	OrderCreatedEvent,
-	OrderStatus,
-} from '@eg-ticketing/common';
+import { natsWrapper, OrderCancelled } from '@eg-ticketing/common';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Ticket } from '../../../models/ticket';
-import { OrderCreatedListener } from '../order-created';
+import { OrderCancelledListener } from '../order-cancelled';
 
 const setup = async () => {
-	const listener = new OrderCreatedListener(natsWrapper.client);
+	const listener = new OrderCancelledListener(natsWrapper.client);
 
 	const ticket = Ticket.build({ userId: 'fake', title: 'Concert', price: 20 });
 	await ticket.save();
 
-	const data: OrderCreatedEvent['data'] = {
+	const data: OrderCancelled['data'] = {
 		id: mongoose.Types.ObjectId().toHexString(),
-		status: OrderStatus.Created,
 		ticket: {
 			id: ticket.id,
-			price: 10,
 		},
-		userId: 'fake',
-		expiresAt: 'fakeExpirtation',
 	};
 
 	const message: Pick<Message, 'ack'> = {
@@ -32,14 +24,14 @@ const setup = async () => {
 	return { listener, ticket, data, message };
 };
 
-it('Should successfully set the id of the order inside the ticket', async () => {
+it('Should successfully set the order Id to undefined', async () => {
 	const { listener, ticket, data, message } = await setup();
 
 	await listener.onMessage(data, message as Message);
 
 	const updatedTicket = await Ticket.findById(ticket.id);
 
-	expect(updatedTicket!.orderId).toEqual(data.id);
+	expect(updatedTicket!.orderId).toEqual(undefined);
 });
 
 it('Should successfully acks the message', async () => {

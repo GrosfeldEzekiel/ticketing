@@ -14,9 +14,9 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
 
         if (!ticket) return
 
-        if (ticket.__v !== version - 1) return
+        if (ticket.version !== version - 1) return
 
-        ticket.set({ title, price })
+        ticket.set({ title, price, version })
 
         await ticket.save()
 

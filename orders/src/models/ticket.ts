@@ -12,6 +12,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
+  version: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -30,6 +31,10 @@ const ticketSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    version: {
+      type: Number,
+      default: 0
+    }
   },
   {
     toJSON: {
