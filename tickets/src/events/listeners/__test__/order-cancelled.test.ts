@@ -1,16 +1,16 @@
-import { natsWrapper, OrderCancelled } from '@eg-ticketing/common';
+import { natsWrapper, OrderCancelledEvent } from '@eg-ticketing/common';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Ticket } from '../../../models/ticket';
-import { OrderCancelledListener } from '../order-cancelled';
+import { OrderCancelledEventListener } from '../order-cancelled';
 
 const setup = async () => {
-	const listener = new OrderCancelledListener(natsWrapper.client);
+	const listener = new OrderCancelledEventListener(natsWrapper.client);
 
 	const ticket = Ticket.build({ userId: 'fake', title: 'Concert', price: 20 });
 	await ticket.save();
 
-	const data: OrderCancelled['data'] = {
+	const data: OrderCancelledEvent['data'] = {
 		id: mongoose.Types.ObjectId().toHexString(),
 		ticket: {
 			id: ticket.id,

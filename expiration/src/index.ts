@@ -1,16 +1,7 @@
 import { natsWrapper } from '@eg-ticketing/common';
-import mongoose from 'mongoose';
-import { app } from './app';
-import { OrderCancelledEventListener } from './events/listeners/order-cancelled';
 import { OrderCreatedListener } from './events/listeners/order-created';
 
 const start = async () => {
-	if (!process.env.JWT_KEY) {
-		throw new Error('JWT_KEY must be defined');
-	}
-	if (!process.env.MONGO_URI) {
-		throw new Error('MONGO_URI must be defined');
-	}
 	if (!process.env.NATS_SRV_PORT) {
 		throw new Error('NATS_SRV_PORT must be defined');
 	}
@@ -19,6 +10,15 @@ const start = async () => {
 	}
 	if (!process.env.NATS_CLIENT_ID) {
 		throw new Error('NATS_CLIENT_ID must be defined');
+	}
+	if (!process.env.REDIS_HOST) {
+		throw new Error('REDIS_HOST must be defined');
+	}
+	if (!process.env.REDIS_PORT) {
+		throw new Error('REDIS_PORT must be defined');
+	}
+	if (!process.env.REDIS_PASSWORD) {
+		throw new Error('REDIS_PASSWORD must be defined');
 	}
 
 	try {
@@ -35,23 +35,11 @@ const start = async () => {
 		process.on('SIGINT', () => natsWrapper.client.close());
 		process.on('SIGTERM', () => natsWrapper.client.close());
 
-		new OrderCancelledEventListener(natsWrapper.client).listen();
 		new OrderCreatedListener(natsWrapper.client).listen();
-
-		await mongoose.connect(process.env.MONGO_URI, {
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			useCreateIndex: true,
-		});
-		console.log('Connected to Mongo DB');
 	} catch (e) {
 		console.error(e);
 		process.exit(1);
 	}
-
-	app.listen(3000, () => {
-		console.log('Listening on port 3000');
-	});
 };
 
 start();
