@@ -14,6 +14,9 @@ const connection = {
 
 const expirationQueue = new Queue<Payload>('order:expiration', {
 	connection,
+	defaultJobOptions: {
+		removeOnComplete: true,
+	},
 });
 
 const expirationScheduler = new QueueScheduler(expirationQueue.name, {
