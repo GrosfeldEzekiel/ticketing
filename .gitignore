@@ -3,3 +3,4 @@ secrets.sh
 .next
 .env.db
 lib
+env.ts

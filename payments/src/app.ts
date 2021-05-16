@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
 import { errorHandler, NotFoundError } from '@eg-ticketing/common';
+import { createChargeRouter } from './routes/new';
 
 const app = express();
 // TRUST NGINX
@@ -16,6 +17,8 @@ app.use(
 		secure: process.env.NODE_ENV !== 'test' ? true : false,
 	})
 );
+
+app.use(createChargeRouter);
 
 app.all('*', () => {
 	throw new NotFoundError();

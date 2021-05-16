@@ -1,4 +1,8 @@
-import { natsWrapper, OrderCancelledEvent, OrderStatus } from '@eg-ticketing/common';
+import {
+	natsWrapper,
+	OrderCancelledEvent,
+	OrderStatus,
+} from '@eg-ticketing/common';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Order } from '../../../models/order';
@@ -7,7 +11,7 @@ import { OrderCancelledListener } from '../order-cancelled';
 const setup = async () => {
 	const listener = new OrderCancelledListener(natsWrapper.client);
 
-	const order = await Order.build({
+	const order = Order.build({
 		id: mongoose.Types.ObjectId().toHexString(),
 		price: 10,
 		userId: 'random',

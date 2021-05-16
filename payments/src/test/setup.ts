@@ -1,65 +1,65 @@
-import { MongoMemoryServer } from "mongodb-memory-server";
-import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
 
 let mongo: any;
 
 jest.mock('@eg-ticketing/common', () => {
-  const original = jest.requireActual('@eg-ticketing/common');
+	const original = jest.requireActual('@eg-ticketing/common');
 
-  return {
-    __esmodule: true,
-    ...original,
-    natsWrapper: {
-      client: {
-        publish: jest
-          .fn()
-          .mockImplementation(
-            (subject: string, data: string, callback: () => void) => {
-              callback();
-            }
-          ),
-      },
-    },
-  };
+	return {
+		__esmodule: true,
+		...original,
+		natsWrapper: {
+			client: {
+				publish: jest
+					.fn()
+					.mockImplementation(
+						(subject: string, data: string, callback: () => void) => {
+							callback();
+						}
+					),
+			},
+		},
+	};
 });
 
 beforeAll(async () => {
-  process.env.JWT_KEY = "random";
+	process.env.JWT_KEY = 'random';
 
-  mongo = new MongoMemoryServer();
-  const mongoUri = await mongo.getUri();
+	mongo = new MongoMemoryServer();
+	const mongoUri = await mongo.getUri();
 
-  await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+	await mongoose.connect(mongoUri, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	});
 });
 
 beforeEach(async () => {
-  jest.clearAllMocks();
-  const collections = await mongoose.connection.db.collections();
+	jest.clearAllMocks();
+	const collections = await mongoose.connection.db.collections();
 
-  for (let collection of collections) {
-    await collection.deleteMany({});
-  }
+	for (let collection of collections) {
+		await collection.deleteMany({});
+	}
 });
 
 afterAll(async () => {
-  await mongo.stop();
-  await mongoose.connection.close();
+	await mongo.stop();
+	await mongoose.connection.close();
 });
 
-export const getCookie = () => {
-  const sessionJSON = JSON.stringify({
-    jwt: jwt.sign(
-      {
-        id: new mongoose.Types.ObjectId().toHexString(),
-        email: "test@test.com",
-      },
-      process.env.JWT_KEY!
-    ),
-  });
-  // Return Cookie string
-  return [`express:sess=${Buffer.from(sessionJSON).toString("base64")}`];
+export const getCookie = (id?: string) => {
+	const sessionJSON = JSON.stringify({
+		jwt: jwt.sign(
+			{
+				id: id ?? new mongoose.Types.ObjectId().toHexString(),
+				email: 'test@test.com',
+			},
+			process.env.JWT_KEY!
+		),
+	});
+	// Return Cookie string
+	return [`express:sess=${Buffer.from(sessionJSON).toString('base64')}`];
 };
