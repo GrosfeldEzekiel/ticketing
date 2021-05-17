@@ -24,6 +24,9 @@ jest.mock('@eg-ticketing/common', () => {
 	};
 });
 
+process.env.STRIPE_KEY =
+	'sk_test_51IrPTAIjElOHUtmjzVqe6tCizRFY6PYU21dcCh6aHMQDr3195fThcHvCD3Pbvw4Y4zDlNx2gNCw6lbd8BYb1QIJQ00t9cezAOq';
+
 beforeAll(async () => {
 	process.env.JWT_KEY = 'random';
 
