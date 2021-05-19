@@ -4,3 +4,4 @@ secrets.sh
 .env.db
 lib
 env.ts
+dist
