@@ -5,6 +5,7 @@ import { OrderCancelledListener } from './events/listeners/order-cancelled';
 import { OrderCreatedListener } from './events/listeners/order-created';
 
 const start = async () => {
+	console.log('Starting Payments Service');
 	if (!process.env.JWT_KEY) {
 		throw new Error('JWT_KEY must be defined');
 	}
@@ -22,7 +23,11 @@ const start = async () => {
 	}
 
 	try {
-		await natsWrapper.connect(process.env.NATS_CLUSTER_ID, process.env.NATS_CLIENT_ID, process.env.NATS_SRV_PORT!);
+		await natsWrapper.connect(
+			process.env.NATS_CLUSTER_ID,
+			process.env.NATS_CLIENT_ID,
+			process.env.NATS_SRV_PORT!
+		);
 		natsWrapper.client.on('error', () => {
 			console.log('Closing NATS!');
 			process.exit();

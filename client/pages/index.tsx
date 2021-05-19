@@ -45,7 +45,7 @@ const App = () => {
 								<Button
 									disabled={ticket.orderId}
 									onClick={() => router.push(`/tickets/${ticket.id}`)}
-									text="Comprar"
+									text="Ver"
 								/>
 							}
 						/>
