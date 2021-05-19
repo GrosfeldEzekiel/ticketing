@@ -18,6 +18,7 @@ spec:
           env:
             - name: API_URL
               value: 'http://www.ezeticketing.games'
+      dnsPolicy: Default
 ---
 apiVersion: v1
 kind: Service
