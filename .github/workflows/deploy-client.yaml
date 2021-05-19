@@ -1,0 +1,22 @@
+name: deploy-client
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - client/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd client && docker build -t ezegrosfeld/client .
+      - run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ezegrosfeld --password-stdin
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push ezegrosfeld/client
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_KEY}}
+      - run: doctl kubernetes cluster kubeconfig save ticketing
+      - run: kubectl rollout restart deployment client-depl
