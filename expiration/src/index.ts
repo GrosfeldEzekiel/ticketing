@@ -2,6 +2,7 @@ import { natsWrapper } from '@eg-ticketing/common';
 import { OrderCreatedListener } from './events/listeners/order-created';
 
 const start = async () => {
+	console.log('Starting Expiration Service');
 	if (!process.env.NATS_SRV_PORT) {
 		throw new Error('NATS_SRV_PORT must be defined');
 	}

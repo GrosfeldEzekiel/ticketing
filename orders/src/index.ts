@@ -7,6 +7,7 @@ import { TicketCreatedListener } from './events/listeneres/ticket-created';
 import { TicketUpdatedListener } from './events/listeneres/ticket-updated';
 
 const start = async () => {
+	console.log('Starting Orders Service');
 	if (!process.env.JWT_KEY) {
 		throw new Error('JWT_KEY must be defined');
 	}
