@@ -1,4 +1,5 @@
 import axios from 'axios';
+import https from 'https';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -62,10 +63,14 @@ export const getServerSideProps: GetServerSideProps = async ({
 	params,
 }) => {
 	try {
+		const agent = new https.Agent({
+			rejectUnauthorized: false,
+		});
 		const { data: ticket } = await axios.get(
 			`${process.env.API_URL}/api/tickets/${params.id}`,
 			{
 				headers: req.headers,
+				httpsAgent: agent,
 			}
 		);
 
