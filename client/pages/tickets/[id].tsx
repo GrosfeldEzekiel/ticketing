@@ -11,8 +11,7 @@ import useUser from '../../hooks/use-user';
 const Ticket = (props) => {
 	useUser(true);
 	const router = useRouter();
-	const { data: ticket } = useFetch(`/api/tickets/${props.ticket.id}`, {
-		initialData: props.ticket,
+	const { data: ticket } = useFetch(`/api/tickets/${props.ticketId}`, {
 		refreshInterval: 1,
 	});
 	const [loading, setLoading] = useState(false);
@@ -57,31 +56,12 @@ const Ticket = (props) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-	req,
-	params,
-}) => {
-	try {
-		const { data: ticket } = await axios.get(
-			`${process.env.API_URL}/api/tickets/${params.id}`,
-			{
-				headers: req.headers,
-			}
-		);
-
-		console.log(ticket);
-
-		return {
-			props: {
-				ticket: ticket,
-			},
-		};
-	} catch (e) {
-		console.error(e);
-		return {
-			notFound: true,
-		};
-	}
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+	return {
+		props: {
+			ticketId: params.id,
+		},
+	};
 };
 
 export default Ticket;

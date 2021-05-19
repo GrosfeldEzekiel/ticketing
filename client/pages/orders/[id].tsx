@@ -11,9 +11,7 @@ import useUser from '../../hooks/use-user';
 
 const Order = (props) => {
 	const { data: user } = useUser(true);
-	const { data: order } = useFetch(`/api/orders/${props.order.id}`, {
-		initialData: props.order,
-	});
+	const { data: order } = useFetch(`/api/orders/${props.orderId}`);
 
 	const [payed, setPayed] = useState(false);
 
@@ -29,7 +27,7 @@ const Order = (props) => {
 		},
 		onSuccess: async () =>
 			await mutate(
-				`/api/orders/${props.order.id}`,
+				`/api/orders/${props.orderId}`,
 				{ ...order, status: 'complete' },
 				false
 			),
@@ -118,28 +116,12 @@ const Order = (props) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-	req,
-	params,
-}) => {
-	try {
-		const { data: order } = await axios.get(
-			`${process.env.API_URL}/api/orders/${params.id}`,
-			{
-				headers: req.headers,
-			}
-		);
-
-		return {
-			props: {
-				order: order,
-			},
-		};
-	} catch {
-		return {
-			notFound: true,
-		};
-	}
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+	return {
+		props: {
+			orderId: params.id,
+		},
+	};
 };
 
 export default Order;
