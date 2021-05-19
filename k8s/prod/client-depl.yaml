@@ -17,7 +17,7 @@ spec:
           image: ezegrosfeld/client
           env:
             - name: API_URL
-              value: 'http://www.ezeticketing.games/'
+              value: 'http://www.ezeticketing.games'
 ---
 apiVersion: v1
 kind: Service
