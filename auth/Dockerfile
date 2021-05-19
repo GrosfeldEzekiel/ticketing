@@ -1,11 +1,16 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as packages
 
 WORKDIR /app
 
 COPY package.json .
 
-RUN npm install --only=prod
+RUN npm install
 
-COPY . .
+## Stage two
+FROM packages
+
+COPY . ./
+
+RUN npm run build
 
 CMD ["npm", "start"]

@@ -1,16 +1,12 @@
-FROM node:lts-alpine as deps
+FROM node:lts-alpine
 
 WORKDIR /app
 
 COPY package.json .
 COPY yarn.lock .
 
-RUN yarn install
-
-FROM deps
+RUN yarn install --prod
 
 COPY . .
-
-RUN yarn run build
 
 CMD ["yarn", "start"]
