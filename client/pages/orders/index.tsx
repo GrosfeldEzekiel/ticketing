@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { GetServerSideProps } from 'next';
 import Card from '../../components/Card';
 import Text from '../../components/Text';
+import useFetch from '../../hooks/use-fetch';
 
-const Orders = ({ orders }) => {
+const Orders = () => {
+	const { data: orders } = useFetch('/api/orders');
 	return (
 		<>
 			{orders.map((ord) => (
@@ -47,27 +47,6 @@ const Orders = ({ orders }) => {
 			))}
 		</>
 	);
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	try {
-		const { data: orders } = await axios.get(
-			`${process.env.API_URL}/api/orders`,
-			{
-				headers: req.headers,
-			}
-		);
-
-		return {
-			props: {
-				orders: orders,
-			},
-		};
-	} catch {
-		return {
-			notFound: true,
-		};
-	}
 };
 
 export default Orders;

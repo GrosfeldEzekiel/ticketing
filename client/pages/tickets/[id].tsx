@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Button from '../../components/Button';
@@ -8,10 +6,11 @@ import useFetch from '../../hooks/use-fetch';
 import useRequest from '../../hooks/use-request';
 import useUser from '../../hooks/use-user';
 
-const Ticket = (props) => {
+const Ticket = () => {
 	useUser(true);
 	const router = useRouter();
-	const { data: ticket } = useFetch(`/api/tickets/${props.ticketId}`, {
+	const { id } = router.query;
+	const { data: ticket } = useFetch(`/api/tickets/${id}`, {
 		refreshInterval: 1,
 	});
 	const [loading, setLoading] = useState(false);
@@ -54,14 +53,6 @@ const Ticket = (props) => {
 			{errors}
 		</div>
 	);
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-	return {
-		props: {
-			ticketId: params.id,
-		},
-	};
 };
 
 export default Ticket;

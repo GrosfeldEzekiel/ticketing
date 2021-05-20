@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import { mutate } from 'swr';
@@ -9,9 +9,11 @@ import useFetch from '../../hooks/use-fetch';
 import useRequest from '../../hooks/use-request';
 import useUser from '../../hooks/use-user';
 
-const Order = (props) => {
+const Order = () => {
+	const router = useRouter();
+	const { id } = router.query;
 	const { data: user } = useUser(true);
-	const { data: order } = useFetch(`/api/orders/${props.orderId}`);
+	const { data: order } = useFetch(`/api/orders/${id}`);
 
 	const [payed, setPayed] = useState(false);
 
@@ -27,7 +29,7 @@ const Order = (props) => {
 		},
 		onSuccess: async () =>
 			await mutate(
-				`/api/orders/${props.orderId}`,
+				`/api/orders/${id}`,
 				{ ...order, status: 'complete' },
 				false
 			),
