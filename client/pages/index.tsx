@@ -29,7 +29,7 @@ const App = () => {
 					.map((ticket) => (
 						<Card
 							key={ticket.id}
-							className="md:w-3/12 w-full m-5 p-4 text-center"
+							className="md:w-3/12 w-full my-5 p-4 text-center"
 							header={
 								<Text
 									variant="h1"
@@ -53,25 +53,6 @@ const App = () => {
 			</div>
 		</>
 	);
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-	try {
-		await axios.get(`${process.env.API_URL}/api/users/currentuser`, {
-			headers: req.headers,
-		});
-		return {
-			props: {
-				loggedIn: true,
-			},
-		};
-	} catch {
-		return {
-			props: {
-				loggedIn: false,
-			},
-		};
-	}
 };
 
 export default App;

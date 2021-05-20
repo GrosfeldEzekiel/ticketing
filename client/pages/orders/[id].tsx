@@ -11,9 +11,11 @@ import useUser from '../../hooks/use-user';
 const Order = () => {
 	const router = useRouter();
 	const { id } = router.query;
-	if (!id) return null
+	if (!id) return null;
 	const { data: user } = useUser(true);
 	const { data: order } = useFetch(`/api/orders/${id}`);
+
+	if (!order) return null;
 
 	const [payed, setPayed] = useState(false);
 

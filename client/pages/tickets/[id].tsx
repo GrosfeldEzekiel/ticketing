@@ -14,12 +14,14 @@ const Ticket = () => {
 	const { data: ticket } = useFetch(`/api/tickets/${id}`, {
 		refreshInterval: 1,
 	});
+
+	if (!ticket) return null;
 	const [loading, setLoading] = useState(false);
 	const { doRequest, errors } = useRequest({
 		url: '/api/orders',
 		method: 'post',
 		body: {
-			ticketId: ticket.id,
+			ticketId: id,
 		},
 		onSuccess: (order: any) => router.push(`/orders/${order.id}`),
 	});
