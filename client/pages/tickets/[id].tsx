@@ -11,11 +11,12 @@ const Ticket = () => {
 	const router = useRouter();
 	const { id } = router.query;
 	if (!id) return null;
-	const { data: ticket } = useFetch(`/api/tickets/${id}`, {
+	const { data: ticket, isLoading } = useFetch(`/api/tickets/${id}`, {
 		refreshInterval: 1,
 	});
 
-	if (!ticket) return null;
+	if (isLoading) return <h1>Cargando...</h1>;
+
 	const [loading, setLoading] = useState(false);
 	const { doRequest, errors } = useRequest({
 		url: '/api/orders',

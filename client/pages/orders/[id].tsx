@@ -13,9 +13,9 @@ const Order = () => {
 	const { id } = router.query;
 	if (!id) return null;
 	const { data: user } = useUser(true);
-	const { data: order } = useFetch(`/api/orders/${id}`);
+	const { data: order, isLoading } = useFetch(`/api/orders/${id}`);
 
-	if (!order) return null;
+	if (isLoading) return <h1>Cargando...</h1>;
 
 	const [payed, setPayed] = useState(false);
 

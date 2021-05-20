@@ -3,8 +3,8 @@ import Text from '../../components/Text';
 import useFetch from '../../hooks/use-fetch';
 
 const Orders = () => {
-	const { data: orders } = useFetch('/api/orders');
-	if (!orders) return null;
+	const { data: orders, isLoading } = useFetch('/api/orders');
+	if (isLoading) return <h1>Cargando...</h1>;
 	return (
 		<>
 			{orders.map((ord) => (

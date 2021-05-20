@@ -29,7 +29,7 @@ const App = () => {
 					.map((ticket) => (
 						<Card
 							key={ticket.id}
-							className="md:w-3/12 w-full my-5 p-4 text-center"
+							className="md:w-3/12 w-full my-5 md:mx-5 p-4 text-center"
 							header={
 								<Text
 									variant="h1"
