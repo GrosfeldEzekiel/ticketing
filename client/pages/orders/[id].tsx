@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import { mutate } from 'swr';
 import Button from '../../components/Button';
@@ -20,6 +20,7 @@ const Order = () => {
 	const [payed, setPayed] = useState(false);
 
 	useEffect(() => {
+		if (!order) return;
 		if (order.status === 'complete') setPayed(true);
 	}, [order]);
 
@@ -27,7 +28,7 @@ const Order = () => {
 		url: '/api/payments',
 		method: 'post',
 		body: {
-			orderId: order.id,
+			orderId: order?.id ?? '',
 		},
 		onSuccess: async () =>
 			await mutate(
@@ -41,7 +42,12 @@ const Order = () => {
 
 	const [timeLeft, setTimeLeft] = useState(1);
 
+	const firstrun = useRef(true);
+
 	useEffect(() => {
+		if (!order) return;
+		if (!firstrun) return;
+		firstrun.current = true;
 		const findTimeLeft = () => {
 			//@ts-ignore
 			const msLeft = new Date(order.expiresAt) - new Date();
@@ -51,7 +57,7 @@ const Order = () => {
 		const intervalId = setInterval(findTimeLeft, 1000);
 
 		return () => clearInterval(intervalId);
-	}, []);
+	}, [order]);
 
 	const pay = async (token: string) => {
 		if (!loading) {

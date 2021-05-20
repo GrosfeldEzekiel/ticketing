@@ -22,7 +22,7 @@ const Ticket = () => {
 		url: '/api/orders',
 		method: 'post',
 		body: {
-			ticketId: id,
+			ticketId: id ?? '',
 		},
 		onSuccess: (order: any) => router.push(`/orders/${order.id}`),
 	});
