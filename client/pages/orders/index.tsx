@@ -4,6 +4,7 @@ import useFetch from '../../hooks/use-fetch';
 
 const Orders = () => {
 	const { data: orders } = useFetch('/api/orders');
+	if (!orders) return null;
 	return (
 		<>
 			{orders.map((ord) => (

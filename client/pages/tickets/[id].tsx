@@ -10,6 +10,7 @@ const Ticket = () => {
 	useUser(true);
 	const router = useRouter();
 	const { id } = router.query;
+	if (!id) return null;
 	const { data: ticket } = useFetch(`/api/tickets/${id}`, {
 		refreshInterval: 1,
 	});

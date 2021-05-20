@@ -1,4 +1,3 @@
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import StripeCheckout from 'react-stripe-checkout';
@@ -12,6 +11,7 @@ import useUser from '../../hooks/use-user';
 const Order = () => {
 	const router = useRouter();
 	const { id } = router.query;
+	if (!id) return null
 	const { data: user } = useUser(true);
 	const { data: order } = useFetch(`/api/orders/${id}`);
 
@@ -116,14 +116,6 @@ const Order = () => {
 			{errors}
 		</div>
 	);
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-	return {
-		props: {
-			orderId: params.id,
-		},
-	};
 };
 
 export default Order;
